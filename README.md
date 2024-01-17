@@ -1,1 +1,1 @@
-# brypy
+# Bryce's personal toolbox of utility functions
