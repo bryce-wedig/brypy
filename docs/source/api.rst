@@ -1,7 +1,5 @@
 API
 ===
 
-.. autosummary::
-   :toctree: generated
-
-   brypy
+.. automodule:: brypy
+    :members:
