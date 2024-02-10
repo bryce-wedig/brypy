@@ -3,7 +3,7 @@ import pytest
 # import numpy.testing as npt
 # import unittest
 
-from brypy import util as bp
+import brypy.util as bp
 
 
 def test_check_negative_values():
@@ -14,7 +14,7 @@ def test_check_negative_values():
     assert bp.check_negative_values(z) is False
 
 
-def test_replace_negatives_with_zeros():
+# def test_replace_negatives_with_zeros():
     # TODO 
 
 
