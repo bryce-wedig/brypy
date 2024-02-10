@@ -1,8 +1,9 @@
 astropy
+hydra-core
+jupyter
 matplotlib
 pandas
 pyarrow
 pytest
 scipy
 tqdm
-hydra-core

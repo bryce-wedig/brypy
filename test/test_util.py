@@ -7,11 +7,14 @@ import brypy.util as bp
 
 
 def test_check_negative_values():
+    # TODO test if list of arrays
+
     z = np.array([[-1, 0], [1, 2], [3, 4]])
-    assert bp.check_negative_values(z) is True
+    assert bp.check_negative_values(z) == True
+    # NB np.bool(False) is False evaluates to False
 
     z = np.ones((4, 2))
-    assert bp.check_negative_values(z) is False
+    assert bp.check_negative_values(z) == False
 
 
 # def test_replace_negatives_with_zeros():
