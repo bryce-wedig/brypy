@@ -14,6 +14,21 @@ from astropy.io import fits
 from omegaconf import OmegaConf
 
 
+def percent_error(observed, exact):
+    return (np.abs(observed - exact) / exact) * 100
+
+
+def pad_rgb_array(rgb_array, pad, value):
+    return np.stack([np.pad(rgb_array[:, :, i], (pad,), mode='constant', constant_values=value) for i in range(3)],
+                    axis=2)
+
+
+def rotate_array(array, angle):
+    pil_image = Image.fromarray(array)
+    rotated_pil_image = pil_image.rotate(angle)
+    return np.asarray(rotated_pil_image)
+
+
 def hydra_to_dict(config):
     container = OmegaConf.to_container(config, resolve=True)
     return dict(ChainMap(*container))
