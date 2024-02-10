@@ -7,7 +7,7 @@ import brypy.util as bp
 
 
 def test_check_negative_values():
-    z = np.array([-1, 0], [1, 2], [3, 4])
+    z = np.array([[-1, 0], [1, 2], [3, 4]])
     assert bp.check_negative_values(z) is True
 
     z = np.ones((4, 2))
