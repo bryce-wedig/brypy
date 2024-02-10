@@ -14,6 +14,52 @@ from astropy.io import fits
 from omegaconf import OmegaConf
 
 
+def check_negative_values(array):
+    # takes an array or a list of arrays
+    if isinstance(array, list):
+        for a in array:
+            if np.any(a < 0):
+                return True
+    else:
+        return np.any(array < 0)
+
+
+def replace_negatives_with_zeros(array):
+    return np.where(array < 0, 0, array)
+
+
+def resize_with_pixels_centered(array, oversample_factor):
+    if oversample_factor % 2 == 0:
+        raise Exception('Oversampling factor must be odd')
+    
+    x, y = array.shape
+    if x != y:
+        raise Exception('Array must be square')
+    
+    flattened_array = array.flatten()
+    oversample_grid = np.zeros((x * oversample_factor, x * oversample_factor))
+
+    k = 0
+    for i, row in enumerate(oversample_grid):
+        for j, _ in enumerate(row):
+            if not (i % oversample_factor) - ((oversample_factor - 1) / 2) == 0:
+                continue
+            if (j % oversample_factor) - ((oversample_factor - 1) / 2) == 0:
+                oversample_grid[i][j] = flattened_array[k]
+                k += 1
+
+    return oversample_grid
+
+
+def center_crop_image(array, shape):
+    y_out, x_out = shape
+    tuple = array.shape
+    y, x = tuple[0], tuple[1]
+    x_start = (x // 2) - (x_out // 2)
+    y_start = (y // 2) - (y_out // 2)
+    return array[y_start:y_start + y_out, x_start:x_start + x_out]
+
+
 def percent_error(observed, exact):
     return (np.abs(observed - exact) / exact) * 100
 
