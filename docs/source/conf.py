@@ -1,23 +1,31 @@
 # Configuration file for the Sphinx documentation builder.
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../..'))
+
 # -- Project information
 
 project = 'brypy'
 copyright = '2024, Bryce Wedig'
 author = 'Bryce Wedig'
 
-release = '0.1'
-version = '0.1.0'
+release = '0.0'
+version = '0.0.0'
 
 # -- General configuration
 
 extensions = [
-    'sphinx.ext.duration',
-    'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
+    'sphinx.ext.autodoc',  # generate autodocs
+    'sphinx.ext.napoleon',  # for autodoc config
+    'sphinx.ext.todo',
+    'sphinx.ext.mathjax',  # autodocs with math
+    'sphinx.ext.autosectionlabel'
 ]
+
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_ivar = True  # for math
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3/', None),

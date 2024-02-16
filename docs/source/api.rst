@@ -1,5 +1,5 @@
 API
 ===
 
-.. automodule:: brypy
+.. automodule:: brypy.util
     :members:

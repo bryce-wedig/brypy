@@ -52,6 +52,9 @@ def resize_with_pixels_centered(array, oversample_factor):
 
 
 def center_crop_image(array, shape):
+    if array.shape == shape:
+        return array
+
     y_out, x_out = shape
     tuple = array.shape
     y, x = tuple[0], tuple[1]
@@ -96,6 +99,14 @@ def combine_all_csvs(path, filename):
 
 
 def remove_bom(filepath):
+    """
+    Remove the byte-order mark (BOM) from a CSV file
+
+    Parameters
+    ----------
+    filepath : str
+        Path to the CSV file
+    """
     s = open(filepath, mode='r', encoding='utf-8-sig').read()
     open(filepath, mode='w', encoding='utf-8').write(s)
 
@@ -174,18 +185,20 @@ def combine_images(columns, space, images, filename):
     background.save(filename)
 
 
-def center_crop_image(array, shape):
-    y_out, x_out = shape
-    tuple = array.shape
-    y, x = tuple[0], tuple[1]
-    x_start = (x // 2) - (x_out // 2)
-    y_start = (y // 2) - (y_out // 2)
-    return array[y_start:y_start + y_out, x_start:x_start + x_out]
-
-
 def get_indices_of_largest_values(num_points, np_array):
     """
-    Return indices of largest values of np.array where first element is index of largest value
+    Return indices of largest values of ndarray where first element is index of largest value
+
+    Parameters
+    ----------
+    num_points : int
+        Number of points to return
+    np_array : ndarray
+
+    Returns
+    -------
+    result : ndarray
+        List of indices of largest values
     """
     indices_of_sorted = np.argsort(np_array)
     return np.flip(indices_of_sorted[-num_points:])
@@ -194,6 +207,15 @@ def get_indices_of_largest_values(num_points, np_array):
 def get_indices_of_smallest_values(num_points, np_array):
     """
     Return indices of smallest values of np.array where first element is index of smallest value
+
+    Parameters
+    ----------
+    num_points
+    np_array
+
+    Returns
+    -------
+
     """
     indices_of_sorted = np.argsort(np_array)
     return indices_of_sorted[:num_points]
