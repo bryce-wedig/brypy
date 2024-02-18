@@ -6,4 +6,6 @@ pandas
 pyarrow
 pytest
 scipy
+sphinx
+sphinx-rtd-theme
 tqdm
