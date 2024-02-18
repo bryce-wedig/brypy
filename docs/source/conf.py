@@ -36,7 +36,7 @@ intersphinx_disabled_domains = ['std']
 templates_path = ['_templates']
 
 # https://stackoverflow.com/questions/67485175/docstrings-are-not-included-in-read-the-docs-sphinx-build/67486947#67486947
-autodoc_mock_imports = ['numpy', 'pandas', 'PIL']
+autodoc_mock_imports = ['numpy', 'pandas', 'PIL', 'astropy', 'omegaconf']
 
 # -- Options for HTML output
 
