@@ -1,4 +1,4 @@
-tmp/
+docs/build
 
 # Unit testing
 .pytest_cache

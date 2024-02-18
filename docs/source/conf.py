@@ -35,6 +35,9 @@ intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
 
+# https://stackoverflow.com/questions/67485175/docstrings-are-not-included-in-read-the-docs-sphinx-build/67486947#67486947
+autodoc_mock_imports = ['numpy']
+
 # -- Options for HTML output
 
 html_theme = 'sphinx_rtd_theme'
