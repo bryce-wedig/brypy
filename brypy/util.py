@@ -15,7 +15,15 @@ from omegaconf import OmegaConf
 
 
 def check_negative_values(array):
-    # takes an array or a list of arrays
+    """
+    Check if there are any negative values in the given array or list of arrays.
+
+    Parameters:
+    array (array-like or list of array-like): The input array or list of arrays.
+
+    Returns:
+    bool: True if there are negative values, False otherwise.
+    """
     if isinstance(array, list):
         for a in array:
             if np.any(a < 0):
@@ -25,10 +33,38 @@ def check_negative_values(array):
 
 
 def replace_negatives_with_zeros(array):
+    """
+    Replace negative values in the input array with zeros.
+
+    Parameters
+    ----------
+    array : numpy.ndarray
+        Input array.
+
+    Returns
+    -------
+    numpy.ndarray
+        Array with negative values replaced by zeros.
+    """
     return np.where(array < 0, 0, array)
 
 
 def resize_with_pixels_centered(array, oversample_factor):
+    """
+    Resize the input array with centered pixels using the specified oversample factor.
+
+    Parameters:
+    array (ndarray): The input array to be resized. It must be square.
+    oversample_factor (int): The factor by which to oversample the array. It must be odd.
+
+    Returns:
+    ndarray: The resized array with centered pixels.
+
+    Raises:
+    Exception: If the oversample factor is even.
+    Exception: If the input array is not square.
+    """
+
     if oversample_factor % 2 == 0:
         raise Exception('Oversampling factor must be odd')
     
@@ -52,6 +88,19 @@ def resize_with_pixels_centered(array, oversample_factor):
 
 
 def center_crop_image(array, shape):
+    """
+    Crop the input array to the specified shape by centering the crop.
+
+    Parameters:
+    - array (ndarray): The input array to be cropped.
+    - shape (tuple): The desired shape of the cropped array.
+
+    Returns:
+    - ndarray: The cropped array.
+
+    If the input array already has the specified shape, it is returned as is.
+    Otherwise, the array is cropped by centering the crop around the center of the input array.
+    """
     if array.shape == shape:
         return array
 
@@ -64,6 +113,29 @@ def center_crop_image(array, shape):
 
 
 def percent_error(observed, exact):
+    """
+    Calculate the percent error between an observed value and an exact value.
+
+    Parameters
+    ----------
+    observed : float
+        The observed value.
+    exact : float
+        The exact value.
+
+    Returns
+    -------
+    float
+        The percent error between the observed and exact values.
+
+    Examples
+    --------
+    >>> percent_error(5, 4)
+    25.0
+
+    >>> percent_error(10, 10)
+    0.0
+    """
     return (np.abs(observed - exact) / exact) * 100
 
 
@@ -73,6 +145,22 @@ def pad_rgb_array(rgb_array, pad, value):
 
 
 def rotate_array(array, angle):
+    """
+    Rotate a 2D numpy array by a given angle.
+
+    Parameters
+    ----------
+    array : numpy.ndarray 
+        The input array to be rotated.
+    angle : float
+        The angle of rotation in degrees.
+
+    Returns
+    -------
+    numpy.ndarray
+        The rotated array.
+
+    """
     pil_image = Image.fromarray(array)
     rotated_pil_image = pil_image.rotate(angle)
     return np.asarray(rotated_pil_image)
@@ -187,18 +275,19 @@ def combine_images(columns, space, images, filename):
 
 def get_indices_of_largest_values(num_points, np_array):
     """
-    Return indices of largest values of ndarray where first element is index of largest value
+    Returns the indices of the largest values in the given NumPy array.
 
-    Parameters
-    ----------
-    num_points : int
-        Number of points to return
-    np_array : ndarray
+    Parameters:
+    num_points (int): The number of largest values to return.
+    np_array (ndarray): The input NumPy array.
 
-    Returns
-    -------
-    result : ndarray
-        List of indices of largest values
+    Returns:
+    ndarray: The indices of the largest values in the array.
+
+    Example:
+    >>> np_array = np.array([1, 5, 3, 9, 2])
+    >>> get_indices_of_largest_values(3, np_array)
+    array([3, 1, 2])
     """
     indices_of_sorted = np.argsort(np_array)
     return np.flip(indices_of_sorted[-num_points:])
@@ -206,22 +295,49 @@ def get_indices_of_largest_values(num_points, np_array):
 
 def get_indices_of_smallest_values(num_points, np_array):
     """
-    Return indices of smallest values of np.array where first element is index of smallest value
+    Returns the indices of the smallest values in the given NumPy array.
 
-    Parameters
-    ----------
-    num_points
-    np_array
+    Parameters:
+    - num_points (int): The number of smallest values to return.
+    - np_array (ndarray): The input NumPy array.
 
-    Returns
-    -------
+    Returns:
+    - ndarray: The indices of the smallest values in the input array.
 
+    Example:
+    >>> np_array = np.array([5, 2, 8, 1, 6])
+    >>> get_indices_of_smallest_values(3, np_array)
+    array([3, 1, 0])
     """
     indices_of_sorted = np.argsort(np_array)
     return indices_of_sorted[:num_points]
 
 
 def print_execution_time(start, stop):
+    """
+    Print the execution time between two given timestamps.
+
+    Parameters
+    ----------
+    start : float
+        The start timestamp.
+    stop : float
+        The stop timestamp.
+
+    Returns
+    -------
+    None
+        This function does not return anything.
+
+    Examples
+    --------
+    >>> start = time.time()
+    >>> # Some code to measure execution time
+    >>> stop = time.time()
+    >>> print_execution_time(start, stop)
+    Execution time: 0:00:05
+
+    """
     execution_time = str(datetime.timedelta(seconds=round(stop - start)))
     print(f'Execution time: {execution_time}')
 
@@ -247,11 +363,37 @@ def unpickle_all(dir_path, prefix='', limit=None):
 
 
 def create_directory_if_not_exists(path):
+    """
+    Create a directory if it does not already exist.
+
+    Parameters
+    ----------
+    path : str
+        The path of the directory to be created.
+
+    Returns
+    -------
+    None
+
+    """
     if not os.path.exists(path):
         os.makedirs(path)
 
 
 def clear_directory(path):
+    """
+    Clear all files and directories within the specified path.
+
+    Parameters
+    ----------
+    path : str
+        The path to the directory to be cleared.
+
+    Returns
+    -------
+    None
+
+    """
     for i in glob(path + '/*'):
         if os.path.isfile(i):
             os.remove(i)
@@ -285,11 +427,38 @@ def scientific_notation_string(input):
 
 
 def delete_if_exists(path):
+    """
+    Delete a file if it exists.
+
+    Parameters
+    ----------
+    path : str
+        The path to the file.
+
+    Returns
+    -------
+    None
+
+    """
     if os.path.exists(path):
         os.remove(path)
 
 
 def get_dict_keys_as_list(dict):
+    """
+    Return a list of keys from the given dictionary.
+
+    Parameters
+    ----------
+    dict : dict
+        The dictionary from which to extract the keys.
+
+    Returns
+    -------
+    list
+        A list containing the keys from the dictionary.
+
+    """
     list = []
     for key in dict.keys():
         list.append(key)
@@ -298,4 +467,12 @@ def get_dict_keys_as_list(dict):
 
 
 def get_today_str():
+    """
+    Get the current date as a string.
+
+    Returns
+    -------
+    str
+        The current date in the format 'YYYY-MM-DD'.
+    """
     return str(datetime.date.today())
