@@ -28,8 +28,14 @@ def check_negative_values(array):
         for a in array:
             if np.any(a < 0):
                 return True
+            else:
+                return False
     else:
-        return np.any(array < 0)
+        # NB np.bool(False) ==/is False evaluates to False, so return only the native boolean
+        if np.any(array < 0):
+            return True
+        else:
+            return False
 
 
 def replace_negatives_with_zeros(array):
@@ -53,14 +59,20 @@ def resize_with_pixels_centered(array, oversample_factor):
     """
     Resize the input array with centered pixels using the specified oversample factor.
 
-    Parameters:
-    array (ndarray): The input array to be resized. It must be square.
-    oversample_factor (int): The factor by which to oversample the array. It must be odd.
+    Parameters
+    ----------
+    array : numpy.ndarray
+        The input array to be resized. It must be square.
+    oversample_factor : int
+        The factor by which to oversample the array. It must be odd.
 
-    Returns:
-    ndarray: The resized array with centered pixels.
+    Returns
+    -------
+    numpy.ndarray
+        The resized array with centered pixels.
 
-    Raises:
+    Raises
+    ------
     Exception: If the oversample factor is even.
     Exception: If the input array is not square.
     """
@@ -88,19 +100,6 @@ def resize_with_pixels_centered(array, oversample_factor):
 
 
 def center_crop_image(array, shape):
-    """
-    Crop the input array to the specified shape by centering the crop.
-
-    Parameters:
-    - array (ndarray): The input array to be cropped.
-    - shape (tuple): The desired shape of the cropped array.
-
-    Returns:
-    - ndarray: The cropped array.
-
-    If the input array already has the specified shape, it is returned as is.
-    Otherwise, the array is cropped by centering the crop around the center of the input array.
-    """
     if array.shape == shape:
         return array
 
@@ -199,16 +198,17 @@ def remove_bom(filepath):
     open(filepath, mode='w', encoding='utf-8').write(s)
 
 
-def dict_list_to_csv(dict_list, csv_filepath):
-    if dict_list is not None:
-        keys = get_dict_keys_as_list(dict_list[0])
+# TODO fix
+# def dict_list_to_csv(dict_list, csv_filepath):
+#     if dict_list is not None:
+#         keys = get_dict_keys_as_list(dict_list[0])
 
-        with open(csv_filepath, 'w') as csv_file:
-            writer = DictWriter(csv_file, fieldnames=keys)
-            writer.writeheader()
-            writer.writerows(dict_list)
-    else:
-        raise Exception('Dictionary list is empty')
+#         with open(csv_filepath, 'w') as csv_file:
+#             writer = DictWriter(csv_file, fieldnames=keys)
+#             writer.writeheader()
+#             writer.writerows(dict_list)
+#     else:
+#         raise Exception('Dictionary list is empty')
 
 
 def csv_to_dict_list(csv_filepath):
@@ -442,28 +442,6 @@ def delete_if_exists(path):
     """
     if os.path.exists(path):
         os.remove(path)
-
-
-def get_dict_keys_as_list(dict):
-    """
-    Return a list of keys from the given dictionary.
-
-    Parameters
-    ----------
-    dict : dict
-        The dictionary from which to extract the keys.
-
-    Returns
-    -------
-    list
-        A list containing the keys from the dictionary.
-
-    """
-    list = []
-    for key in dict.keys():
-        list.append(key)
-
-    return list
 
 
 def get_today_str():
