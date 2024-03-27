@@ -3,6 +3,7 @@ import json
 import os
 import pickle as _pickle
 import shutil
+import h5py
 from collections import ChainMap
 from csv import DictReader, DictWriter
 from glob import glob
@@ -12,6 +13,38 @@ import pandas as pd
 from PIL import Image
 from astropy.io import fits
 from omegaconf import OmegaConf
+
+
+def h5_tree(val, pre=''):
+    """
+    Print the tree structure of an HDF5 file.
+    https://stackoverflow.com/questions/61133916/is-there-in-python-a-single-function-that-shows-the-full-structure-of-a-hdf5-fi
+
+    Parameters
+    ----------
+    val
+    pre
+
+    Returns
+    -------
+
+    """
+    items = len(val)
+    for key, val in val.items():
+        items -= 1
+        if items == 0:
+            # the last item
+            if type(val) == h5py._hl.group.Group:
+                print(pre + '└── ' + key)
+                h5_tree(val, pre+'    ')
+            else:
+                print(pre + '└── ' + key + ' (%d)' % len(val))
+        else:
+            if type(val) == h5py._hl.group.Group:
+                print(pre + '├── ' + key)
+                h5_tree(val, pre+'│   ')
+            else:
+                print(pre + '├── ' + key + ' (%d)' % len(val))
 
 
 def check_negative_values(array):
