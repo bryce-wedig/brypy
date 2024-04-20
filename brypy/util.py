@@ -15,6 +15,33 @@ from astropy.io import fits
 from omegaconf import OmegaConf
 
 
+def percent_difference(a, b):
+    """
+    Calculate the percentage difference between two values.
+
+    Parameters
+    ----------
+    a : float
+        The first value.
+    b : float
+        The second value.
+
+    Returns
+    -------
+    float
+        The percentage difference between the two values.
+
+    Examples
+    --------
+    >>> percent_difference(10, 20)
+    100.0
+
+    >>> percent_difference(10, 15)
+    50.0
+    """
+    return np.abs(a - b) / ((a + b) / 2) * 100
+
+
 def h5_tree(val, pre=''):
     """
     Print the tree structure of an HDF5 file.
