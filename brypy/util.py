@@ -15,6 +15,33 @@ from astropy.io import fits
 from omegaconf import OmegaConf
 
 
+def percent_change(a, b):
+    """
+    Calculate the percentage change between two values.
+
+    Parameters
+    ----------
+    a : float
+        The first value.
+    b : float
+        The second value.
+
+    Returns
+    -------
+    float
+        The percentage change between the two values.
+
+    Examples
+    --------
+    >>> percent_change(10, 20)
+    100.0
+
+    >>> percent_change(10, 15)
+    50.0
+    """
+    return np.abs(a - b) / a * 100
+
+
 def percent_difference(a, b):
     """
     Calculate the percentage difference between two values.
