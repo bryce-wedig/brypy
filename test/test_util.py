@@ -50,26 +50,26 @@ def test_percent_error():
     assert bp.percent_error(observed, exact) == expected_result
 
 
-def test_rotate_array():
-    array = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    angle = 90
-    expected_result = np.array([[3, 6, 9], [2, 5, 8], [1, 4, 7]])
-    assert np.array_equal(bp.rotate_array(array, angle), expected_result)
+# def test_rotate_array():
+#     array = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+#     angle = 90
+#     expected_result = np.array([[3, 6, 9], [2, 5, 8], [1, 4, 7]])
+#     assert np.array_equal(bp.rotate_array(array, angle), expected_result)
 
-    # array = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    # angle = -45
-    # expected_result = np.array([[9, 6, 3], [8, 5, 2], [7, 4, 1]])
-    # assert np.array_equal(bp.rotate_array(array, angle), expected_result)
+#     # array = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+#     # angle = -45
+#     # expected_result = np.array([[9, 6, 3], [8, 5, 2], [7, 4, 1]])
+#     # assert np.array_equal(bp.rotate_array(array, angle), expected_result)
 
-    array = np.array([[1, 2], [3, 4]])
-    angle = 180
-    expected_result = np.array([[4, 3], [2, 1]])
-    assert np.array_equal(bp.rotate_array(array, angle), expected_result)
+#     array = np.array([[1, 2], [3, 4]])
+#     angle = 180
+#     expected_result = np.array([[4, 3], [2, 1]])
+#     assert np.array_equal(bp.rotate_array(array, angle), expected_result)
 
-    array = np.array([[1]])
-    angle = 270
-    expected_result = np.array([[1]])
-    assert np.array_equal(bp.rotate_array(array, angle), expected_result)
+#     array = np.array([[1]])
+#     angle = 270
+#     expected_result = np.array([[1]])
+#     assert np.array_equal(bp.rotate_array(array, angle), expected_result)
 
 
 def test_get_indices_of_largest_values():

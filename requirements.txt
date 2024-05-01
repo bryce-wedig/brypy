@@ -1,4 +1,5 @@
 astropy
+h5py
 hydra-core
 jupyter
 matplotlib
