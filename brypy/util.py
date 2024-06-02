@@ -103,13 +103,32 @@ def percent_difference(a, b):
 
 def check_negative_values(array):
     """
-    Check if there are any negative values in the given array or list of arrays.
+    Check if there are any negative values in the given array.
 
-    Parameters:
-    array (array-like or list of array-like): The input array or list of arrays.
+    Parameters
+    ----------
+    array : array_like
+        The input array to check for negative values.
 
-    Returns:
-    bool: True if there are negative values, False otherwise.
+    Returns
+    -------
+    bool
+        Returns True if there are negative values in the array, otherwise False.
+
+    Notes
+    -----
+    This function supports both 1-dimensional and multi-dimensional arrays.
+
+    Examples
+    --------
+    >>> check_negative_values([1, 2, 3])
+    False
+
+    >>> check_negative_values([-1, 0, 1])
+    True
+
+    >>> check_negative_values(np.array([[1, 2], [-3, 4]]))
+    True
     """
     if isinstance(array, list):
         for a in array:
@@ -118,7 +137,6 @@ def check_negative_values(array):
             else:
                 return False
     else:
-        # NB np.bool(False) ==/is False evaluates to False, so return only the native boolean
         if np.any(array < 0):
             return True
         else:
@@ -365,16 +383,26 @@ def get_indices_of_largest_values(num_points, np_array):
     Returns the indices of the largest values in the given NumPy array.
 
     Parameters:
-    num_points (int): The number of largest values to return.
-    np_array (ndarray): The input NumPy array.
+    ----------
+    num_points : int
+        The number of indices to return.
+    np_array : numpy.ndarray
+        The input array.
 
     Returns:
-    ndarray: The indices of the largest values in the array.
+    -------
+    numpy.ndarray
+        An array of indices corresponding to the largest values in the input array.
 
-    Example:
-    >>> np_array = np.array([1, 5, 3, 9, 2])
-    >>> get_indices_of_largest_values(3, np_array)
+    Examples:
+    --------
+    >>> arr = np.array([1, 5, 3, 9, 2])
+    >>> get_indices_of_largest_values(3, arr)
     array([3, 1, 2])
+
+    >>> arr = np.array([10, 20, 30, 40, 50])
+    >>> get_indices_of_largest_values(2, arr)
+    array([4, 3])
     """
     indices_of_sorted = np.argsort(np_array)
     return np.flip(indices_of_sorted[-num_points:])
@@ -382,19 +410,19 @@ def get_indices_of_largest_values(num_points, np_array):
 
 def get_indices_of_smallest_values(num_points, np_array):
     """
-    Returns the indices of the smallest values in the given NumPy array.
+    Return the indices of the smallest values in the given Numpy array.
 
-    Parameters:
-    - num_points (int): The number of smallest values to return.
-    - np_array (ndarray): The input NumPy array.
+    Parameters
+    ----------
+    num_points : int
+        The number of indices to return.
+    np_array : numpy.ndarray
+        The input array.
 
-    Returns:
-    - ndarray: The indices of the smallest values in the input array.
-
-    Example:
-    >>> np_array = np.array([5, 2, 8, 1, 6])
-    >>> get_indices_of_smallest_values(3, np_array)
-    array([3, 1, 0])
+    Returns
+    -------
+    numpy.ndarray
+        An array of indices corresponding to the smallest values in the input array.
     """
     indices_of_sorted = np.argsort(np_array)
     return indices_of_sorted[:num_points]
