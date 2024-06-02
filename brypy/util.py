@@ -382,19 +382,19 @@ def get_indices_of_largest_values(num_points, np_array):
     """
     Returns the indices of the largest values in the given NumPy array.
 
-    Parameters:
+    Parameters
     ----------
     num_points : int
         The number of indices to return.
     np_array : numpy.ndarray
         The input array.
 
-    Returns:
+    Returns
     -------
     numpy.ndarray
         An array of indices corresponding to the largest values in the input array.
 
-    Examples:
+    Examples
     --------
     >>> arr = np.array([1, 5, 3, 9, 2])
     >>> get_indices_of_largest_values(3, arr)
@@ -458,11 +458,48 @@ def print_execution_time(start, stop):
 
 
 def pickle(path, thing):
+    """
+    Pickle an object and save it to a file.
+
+    Parameters
+    ----------
+    path : str 
+        The path to the file where the object will be saved.
+    thing : object
+        The object to be pickled and saved.
+
+    Raises:
+        FileNotFoundError: If the specified directory does not exist.
+        PermissionError: If the user does not have permission to write to the specified file.
+
+    """
     with open(path, 'ab') as results_file:
         _pickle.dump(thing, results_file)
 
 
 def unpickle(path):
+    """
+    Unpickles an object from a file.
+
+    Parameters
+    ----------
+    path : str
+        The path to the file containing the pickled object.
+
+    Returns
+    -------
+    object
+        The unpickled object.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file specified by `path` does not exist.
+    EOFError
+        If the end of the file is reached unexpectedly.
+    _pickle.UnpicklingError
+        If the pickled object cannot be unpickled.
+    """
     with open(path, 'rb') as results_file:
         result = _pickle.load(results_file)
     return result
