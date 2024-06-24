@@ -459,7 +459,7 @@ def print_execution_time(start, stop):
 
 def pickle(path, thing):
     """
-    Pickle an object and save it to a file.
+    Pickle an object and save it to a file. Note that the file will be overwritten if it already exists.
 
     Parameters
     ----------
@@ -473,7 +473,7 @@ def pickle(path, thing):
         PermissionError: If the user does not have permission to write to the specified file.
 
     """
-    with open(path, 'ab') as results_file:
+    with open(path, 'wb') as results_file:
         _pickle.dump(thing, results_file)
 
 
