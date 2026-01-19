@@ -399,6 +399,13 @@ def get_indices_of_largest_values(num_points, np_array):
     numpy.ndarray
         An array of indices corresponding to the largest values in the input array.
 
+    Warns
+    -----
+    UserWarning
+        If any of the largest values are identical, a warning is issued. For
+        tied values, indices are returned in reverse order of their position
+        in the original array (later indices first).
+
     Examples
     --------
     >>> arr = np.array([1, 5, 3, 9, 2])
@@ -409,8 +416,16 @@ def get_indices_of_largest_values(num_points, np_array):
     >>> get_indices_of_largest_values(2, arr)
     array([4, 3])
     """
+    import warnings
     indices_of_sorted = np.argsort(np_array)
-    return np.flip(indices_of_sorted[-num_points:])
+    result_indices = np.flip(indices_of_sorted[-num_points:])
+    largest_values = np_array[result_indices]
+    if len(largest_values) != len(np.unique(largest_values)):
+        warnings.warn(
+            "Some of the largest values are identical; for tied values, later indices are returned first.",
+            UserWarning
+        )
+    return result_indices
 
 
 def get_indices_of_smallest_values(num_points, np_array):
