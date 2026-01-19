@@ -1,4 +1,5 @@
 # Bryce's personal toolbox of utility functions
+[![Python application](https://github.com/bryce-wedig/brypy/actions/workflows/python-app.yml/badge.svg)](https://github.com/bryce-wedig/brypy/actions/workflows/python-app.yml)
 
 :warning: **This is my personal sandbox and is not intended for public use**
 
