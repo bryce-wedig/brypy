@@ -3,7 +3,6 @@ import json
 import os
 import pickle as _pickle
 import shutil
-# import h5py
 from csv import DictReader, DictWriter
 from glob import glob
 
@@ -66,38 +65,6 @@ def percent_difference(a, b):
     return np.abs(a - b) / ((a + b) / 2) * 100
 
 
-# def h5_tree(val, pre=''):
-#     """
-#     Print the tree structure of an HDF5 file.
-#     https://stackoverflow.com/questions/61133916/is-there-in-python-a-single-function-that-shows-the-full-structure-of-a-hdf5-fi
-
-#     Parameters
-#     ----------
-#     val
-#     pre
-
-#     Returns
-#     -------
-
-#     """
-#     items = len(val)
-#     for key, val in val.items():
-#         items -= 1
-#         if items == 0:
-#             # the last item
-#             if type(val) == h5py._hl.group.Group:
-#                 print(pre + '└── ' + key)
-#                 h5_tree(val, pre+'    ')
-#             else:
-#                 print(pre + '└── ' + key + ' (%d)' % len(val))
-#         else:
-#             if type(val) == h5py._hl.group.Group:
-#                 print(pre + '├── ' + key)
-#                 h5_tree(val, pre+'│   ')
-#             else:
-#                 print(pre + '├── ' + key + ' (%d)' % len(val))
-
-
 def check_negative_values(array):
     """
     Check if there are any negative values in the given array.
@@ -157,51 +124,28 @@ def replace_negatives_with_zeros(array):
     return np.where(array < 0, 0, array)
 
 
-def resize_with_pixels_centered(array, oversample_factor):
+def center_crop_image(array, shape):
     """
-    Resize the input array with centered pixels using the specified oversample factor.
+    Crop an array to the specified shape from the center.
 
     Parameters
     ----------
     array : numpy.ndarray
-        The input array to be resized. It must be square.
-    oversample_factor : int
-        The factor by which to oversample the array. It must be odd.
+        The input 2D array to be cropped.
+    shape : tuple of int
+        The desired output shape as (height, width).
 
     Returns
     -------
     numpy.ndarray
-        The resized array with centered pixels.
+        The center-cropped array with the specified shape.
 
-    Raises
-    ------
-    Exception: If the oversample factor is even.
-    Exception: If the input array is not square.
+    Examples
+    --------
+    >>> arr = np.ones((100, 100))
+    >>> center_crop_image(arr, (50, 50)).shape
+    (50, 50)
     """
-
-    if oversample_factor % 2 == 0:
-        raise Exception('Oversampling factor must be odd')
-    
-    x, y = array.shape
-    if x != y:
-        raise Exception('Array must be square')
-    
-    flattened_array = array.flatten()
-    oversample_grid = np.zeros((x * oversample_factor, x * oversample_factor))
-
-    k = 0
-    for i, row in enumerate(oversample_grid):
-        for j, _ in enumerate(row):
-            if not (i % oversample_factor) - ((oversample_factor - 1) / 2) == 0:
-                continue
-            if (j % oversample_factor) - ((oversample_factor - 1) / 2) == 0:
-                oversample_grid[i][j] = flattened_array[k]
-                k += 1
-
-    return oversample_grid
-
-
-def center_crop_image(array, shape):
     if array.shape == shape:
         return array
 
@@ -240,11 +184,6 @@ def percent_error(observed, exact):
     return (np.abs(observed - exact) / exact) * 100
 
 
-def pad_rgb_array(rgb_array, pad, value):
-    return np.stack([np.pad(rgb_array[:, :, i], (pad,), mode='constant', constant_values=value) for i in range(3)],
-                    axis=2)
-
-
 def rotate_array(array, angle):
     """
     Rotate a 2D numpy array by a given angle.
@@ -268,6 +207,21 @@ def rotate_array(array, angle):
 
 
 def combine_all_csvs(path, filename):
+    """
+    Combine all CSV files in a directory into a single CSV file.
+
+    Parameters
+    ----------
+    path : str
+        The directory path containing CSV files to combine.
+    filename : str
+        The output filename for the combined CSV.
+
+    Returns
+    -------
+    None
+        Writes the combined CSV to the specified filename.
+    """
     # list all files in directory
     csv_files = [f for f in os.listdir(path) if not f.startswith('.')]
 
@@ -295,28 +249,22 @@ def remove_bom(filepath):
     open(filepath, mode='w', encoding='utf-8').write(s)
 
 
-# TODO fix
-# def dict_list_to_csv(dict_list, csv_filepath):
-#     if dict_list is not None:
-#         keys = get_dict_keys_as_list(dict_list[0])
-
-#         with open(csv_filepath, 'w') as csv_file:
-#             writer = DictWriter(csv_file, fieldnames=keys)
-#             writer.writeheader()
-#             writer.writerows(dict_list)
-#     else:
-#         raise Exception('Dictionary list is empty')
-
-
-def csv_to_dict_list(csv_filepath):
-    with open(csv_filepath, mode='r', encoding='utf-8-sig') as f:
-        dict_reader = DictReader(f)
-        list_to_return = list(dict_reader)
-
-    return list_to_return
-
-
 def get_fits_data(fits_filepath, hdu_name):
+    """
+    Extract data from a specific HDU in a FITS file.
+
+    Parameters
+    ----------
+    fits_filepath : str
+        The path to the FITS file.
+    hdu_name : str or int
+        The name or index of the HDU to extract data from.
+
+    Returns
+    -------
+    numpy.ndarray
+        The data array from the specified HDU.
+    """
     with fits.open(fits_filepath) as hdu_list:
         hdu_list.verify()
         data = hdu_list[hdu_name].data
@@ -325,6 +273,19 @@ def get_fits_data(fits_filepath, hdu_name):
 
 
 def array_to_fits(array):
+    """
+    Write a numpy array to a FITS file named 'output.fits'.
+
+    Parameters
+    ----------
+    array : numpy.ndarray
+        The data array to write to the FITS file.
+
+    Returns
+    -------
+    None
+        Writes the array to 'output.fits' in the current directory.
+    """
     hdul = fits.HDUList()
     hdul.append(fits.PrimaryHDU())
     hdul.append(fits.ImageHDU(data=array))
@@ -333,16 +294,68 @@ def array_to_fits(array):
 
 
 def read_json(filepath):
+    """
+    Read and parse a JSON file.
+
+    Parameters
+    ----------
+    filepath : str
+        The path to the JSON file.
+
+    Returns
+    -------
+    dict or list
+        The parsed JSON content.
+    """
     with open(filepath) as json_file:
         return json.load(json_file)
 
 
 def batch_list(list, n):
+    """
+    Split a list into batches of size n.
+
+    Parameters
+    ----------
+    list : list
+        The list to be split into batches.
+    n : int
+        The size of each batch.
+
+    Yields
+    ------
+    list
+        Successive n-sized chunks from the input list.
+
+    Examples
+    --------
+    >>> list(batch_list([1, 2, 3, 4, 5], 2))
+    [[1, 2], [3, 4], [5]]
+    """
     for i in range(0, len(list), n):
         yield list[i:i + n]
 
 
 def combine_images(columns, space, images, filename):
+    """
+    Combine multiple images into a grid layout and save to a file.
+
+    Parameters
+    ----------
+    columns : int
+        The number of columns in the grid.
+    space : int
+        The spacing in pixels between images.
+    images : list of str
+        List of file paths to the images to combine.
+    filename : str
+        The output filename for the combined image.
+
+    Returns
+    -------
+    None
+        Saves the combined image to the specified filename.
+    """
     # calculate number of rows based on columns
     rows = len(images) // columns
     if len(images) % columns:
@@ -498,6 +511,23 @@ def unpickle(path):
 
 
 def unpickle_all(dir_path, prefix='', limit=None):
+    """
+    Unpickle all files in a directory matching a given prefix.
+
+    Parameters
+    ----------
+    dir_path : str
+        The directory path containing pickled files.
+    prefix : str, optional
+        Filter files by this prefix. Default is '' (all files).
+    limit : int, optional
+        Maximum number of files to unpickle. Default is None (no limit).
+
+    Returns
+    -------
+    list
+        A list of unpickled objects from the matching files, sorted alphabetically.
+    """
     file_list = glob(dir_path + f'/{prefix}*')
     sorted_list = sorted(file_list)
     if limit is not None:
@@ -546,28 +576,42 @@ def clear_directory(path):
 
 
 def scientific_notation_string(input):
-    return '{:.2e}'.format(input)
+    """
+    Convert a number to a LaTeX-formatted scientific notation string.
+
+    Parameters
+    ----------
+    input : float
+        The number to convert to scientific notation.
+
+    Returns
+    -------
+    str
+        A LaTeX-formatted string in the form 'N\\cross10^{M}' where N is
+        the coefficient rounded to 2 decimal places and M is the exponent.
+
+    Examples
+    --------
+    >>> scientific_notation_string(1500)
+    '1.5\\\\cross10^{3}'
+    """
+    # convert to Python scientific notion
+    string = '{:e}'.format(input)
+    num_string, exponent = string.split('e')
+    num = str(round(float(num_string), 2))
+
+    # handle exponent
+    if exponent[0] == '+':
+        _, power = exponent.split('+')
+    elif exponent[0] == '-':
+        _, power = exponent.split('-')
+        power = '-' + power
 
 
-# TODO finish
-# def scientific_notation_string(input):
-#     # convert to Python scientific notion
-#     string = '{:e}'.format(input)
-#     num_string, exponent = string.split('e')
-#     num = str(round(float(num_string), 2))
+    power = str(int(power))
+    exponent = '10^{' + power + '}'
 
-#     # handle exponent
-#     if exponent[0] == '+':
-#         _, power = exponent.split('+')
-#     elif exponent[0] == '-':
-#         _, power = exponent.split('-')
-#         power = '-' + power
-
-
-#     power = str(int(power))
-#     exponent = '10^{' + power + '}'
-
-#     return ''.join((num, '\cross', exponent))
+    return ''.join((num, '\cross', exponent))
 
 
 def delete_if_exists(path):
