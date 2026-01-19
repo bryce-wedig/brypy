@@ -23,3 +23,9 @@ git clone https://github.com/bryce-wedig/brypy.git
 cd brypy
 pip install -e ".[all]"
 ```
+
+To build docs:
+```bash
+cd docs/
+make html
+```
