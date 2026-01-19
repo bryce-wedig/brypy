@@ -4,7 +4,6 @@ import os
 import pickle as _pickle
 import shutil
 # import h5py
-from collections import ChainMap
 from csv import DictReader, DictWriter
 from glob import glob
 
@@ -12,7 +11,6 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from astropy.io import fits
-from omegaconf import OmegaConf
 
 
 def percent_change(old, new):
@@ -267,11 +265,6 @@ def rotate_array(array, angle):
     pil_image = Image.fromarray(array)
     rotated_pil_image = pil_image.rotate(angle)
     return np.asarray(rotated_pil_image)
-
-
-def hydra_to_dict(config):
-    container = OmegaConf.to_container(config, resolve=True)
-    return dict(ChainMap(*container))
 
 
 def combine_all_csvs(path, filename):
