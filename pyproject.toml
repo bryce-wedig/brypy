@@ -4,5 +4,34 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "brypy"
-authors = [{ name = "Bryce Wedig" }]
+authors = [{ name = "Bryce Wedig", email = "bryce-wedig@users.noreply.github.com" }]
+readme = "README.md"
+license = { text = "MIT" }
 dynamic = ["version", "description"]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.20",
+    "pandas>=1.3",
+    "pillow>=8.0",
+    "astropy>=5.0",
+    "omegaconf>=2.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyter>=1.0",
+]
+test = [
+    "pytest>=7.0",
+]
+docs = [
+    "sphinx>=4.0",
+    "sphinx-rtd-theme>=1.0",
+]
+all = [
+    "brypy[dev,test,docs]",
+]
+
+[project.urls]
+Homepage = "https://github.com/bryce-wedig/brypy"
+Repository = "https://github.com/bryce-wedig/brypy"
