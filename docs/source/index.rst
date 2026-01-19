@@ -1,12 +1,13 @@
 brypy documentation
 ===================================
 
-.. note::
+.. warning::
 
-   This project is under active development.
+   This is my personal sandbox and is not intended for public use
 
 Contents
 --------
 
 .. toctree::
+    mplstyle
     api
