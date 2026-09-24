@@ -85,8 +85,10 @@ axes.spines.right   : True
 # https://personal.sron.nl/~pault/
 # These colors are distinguishable by most color-blind individuals
 
-axes.prop_cycle     : cycler('color', ['0077BB', 'EE7733', '009988', 'CC3311', '33BBEE', 'EE3377', 'BBBBBB', '000000'])
-#                               blue    orange    teal      red       cyan      magenta   gray      black
+axes.prop_cycle     : cycler('color', ['0077BB', 'EE7733', '009988', 'CC3311', '33BBEE', '332288', 'BBBBBB', '000000'])
+#                               blue    orange    teal      red       cyan      indigo    gray      black
+# Note: indigo (332288) replaces Tol's magenta (EE3377), which under deuteranopia
+# simulation collapses to nearly the same color as teal (009988).
 
 # Alternative: Okabe-Ito colorblind-safe palette
 # axes.prop_cycle   : cycler('color', ['E69F00', '56B4E9', '009E73', 'F0E442', '0072B2', 'D55E00', 'CC79A7', '000000'])
